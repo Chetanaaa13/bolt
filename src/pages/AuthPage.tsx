@@ -121,7 +121,7 @@ const AuthPage: React.FC = () => {
               <motion.button
                 className={`flex-1 py-3 px-4 rounded-xl font-semibold transition-all ${
                   isLogin 
-                    ? 'bg-gradient-to-r from-orange-500 to-pink-500 text-white shadow-lg' 
+                    ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-lg' 
                     : 'text-white/70 hover:text-white'
                 }`}
                 onClick={() => setIsLogin(true)}

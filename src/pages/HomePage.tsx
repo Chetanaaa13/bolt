@@ -113,8 +113,8 @@ const HomePage: React.FC = () => {
               animate={{ 
                 y: [0, -10, 0],
                 boxShadow: [
-                  "0 10px 30px rgba(0,0,0,0.1)",
-                  "0 20px 40px rgba(0,0,0,0.15)",
+                  "0 10px 30px rgba(218, 126, 226, 0.1)",
+                  "0 20px 40px rgba(84, 64, 195, 0.15)",
                   "0 10px 30px rgba(0,0,0,0.1)"
                 ]
               }}
