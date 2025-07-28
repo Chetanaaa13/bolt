@@ -34,17 +34,17 @@ const HomePage: React.FC = () => {
   const destinations = [
     {
       name: "Mysore Palace",
-      image: "https://images.pexels.com/photos/3573382/pexels-photo-3573382.jpeg",
+      image: "https://karnatakatourism.org/wp-content/uploads/2020/06/Mysuru-Palace-banner-1920_1100.jpg",
       description: "Architectural marvel of Karnataka"
     },
     {
       name: "Hampi Ruins",
-      image: "https://images.pexels.com/photos/1007426/pexels-photo-1007426.jpeg",
+      image: "https://blogs.pathbeat.in/wp-content/uploads/2024/09/Hampi_karnataka.jpg",
       description: "UNESCO World Heritage Site"
     },
     {
-      name: "Coorg Hills",
-      image: "https://images.pexels.com/photos/3408744/pexels-photo-3408744.jpeg",
+      name: "Ootty",
+      image: "https://theholidaysdestination.com/wp-content/uploads/2022/02/ooty-tour-3.jpg",
       description: "Coffee plantations and scenic beauty"
     }
   ];

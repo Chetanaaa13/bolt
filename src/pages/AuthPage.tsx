@@ -16,9 +16,8 @@ const AuthPage: React.FC = () => {
   const navigate = useNavigate();
 
   const backgroundImages = [
-    'https://images.pexels.com/photos/3573382/pexels-photo-3573382.jpeg',
-    'https://images.pexels.com/photos/1007426/pexels-photo-1007426.jpeg',
-    'https://images.pexels.com/photos/3408744/pexels-photo-3408744.jpeg',
+    'https://static.vecteezy.com/system/resources/previews/011/848/284/non_2x/world-map-background-with-color-gradient-vector.jpg',
+    
   ];
 
   const handleSubmit = (e: React.FormEvent) => {
