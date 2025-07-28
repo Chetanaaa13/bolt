@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { MapPin, Mail, Lock, User, Eye, EyeOff } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
 
 const AuthPage: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -15,41 +14,44 @@ const AuthPage: React.FC = () => {
   });
 
   const navigate = useNavigate();
-  const { login, signup } = useAuth();
 
   const backgroundImages = [
-    'https://images.pexels.com/photos/3573382/pexels-photo-3573382.jpeg', // Mysore Palace
-    'https://images.pexels.com/photos/1007426/pexels-photo-1007426.jpeg', // Hampi ruins
-    'https://images.pexels.com/photos/3408744/pexels-photo-3408744.jpeg', // Coorg landscape
+    'https://images.pexels.com/photos/3573382/pexels-photo-3573382.jpeg',
+    'https://images.pexels.com/photos/1007426/pexels-photo-1007426.jpeg',
+    'https://images.pexels.com/photos/3408744/pexels-photo-3408744.jpeg',
   ];
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    try {
-      let success = false;
-      if (isLogin) {
-        success = await login(formData.email, formData.password);
-      } else {
-        success = await signup(formData.name, formData.email, formData.password);
-      }
-
-      if (success) {
+    if (isLogin) {
+      const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+      if (
+        storedUser &&
+        formData.name === storedUser.username &&
+        formData.password === storedUser.password
+      ) {
+        localStorage.setItem('isLoggedIn', 'true');
         navigate('/home');
       } else {
-        alert('Authentication failed. Please check your credentials.');
+        alert('⚠️ Invalid username or password.');
       }
-    } catch (error) {
-      alert('An error occurred. Please try again.');
-    } finally {
-      setLoading(false);
+    } else {
+      localStorage.setItem(
+        'user',
+        JSON.stringify({ username: formData.name, email: formData.email, password: formData.password })
+      );
+      alert('🏖️ Registered successfully!');
+      setIsLogin(true);
     }
+
+    setLoading(false);
   };
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* Animated Background */}
+      {/* Background */}
       <motion.div 
         className="absolute inset-0 z-0"
         animate={{ scale: [1, 1.1, 1] }}
@@ -63,7 +65,7 @@ const AuthPage: React.FC = () => {
         />
       </motion.div>
 
-      {/* Floating particles */}
+      {/* Floating Particles */}
       <div className="absolute inset-0 z-10">
         {[...Array(20)].map((_, i) => (
           <motion.div
@@ -115,7 +117,7 @@ const AuthPage: React.FC = () => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.4 }}
           >
-            {/* Toggle Buttons */}
+            {/* Toggle */}
             <div className="flex bg-white/10 rounded-2xl p-1 mb-6">
               <motion.button
                 className={`flex-1 py-3 px-4 rounded-xl font-semibold transition-all ${
@@ -145,43 +147,54 @@ const AuthPage: React.FC = () => {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               {!isLogin && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="relative"
-                >
+                <div className="relative">
                   <User className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/70 w-5 h-5" />
                   <input
                     type="text"
                     placeholder="Full Name"
                     value={formData.name}
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     className="w-full pl-12 pr-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-white/50 focus:outline-none focus:border-orange-400 focus:bg-white/20 transition-all"
-                    required={!isLogin}
+                    required
                   />
-                </motion.div>
+                </div>
               )}
 
-              <div className="relative">
-                <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/70 w-5 h-5" />
-                <input
-                  type="email"
-                  placeholder="Email Address"
-                  value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  className="w-full pl-12 pr-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-white/50 focus:outline-none focus:border-orange-400 focus:bg-white/20 transition-all"
-                  required
-                />
-              </div>
+              {isLogin && (
+                <div className="relative">
+                  <User className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/70 w-5 h-5" />
+                  <input
+                    type="text"
+                    placeholder="Username"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="w-full pl-12 pr-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-white/50 focus:outline-none focus:border-orange-400 focus:bg-white/20 transition-all"
+                    required
+                  />
+                </div>
+              )}
+
+              {!isLogin && (
+                <div className="relative">
+                  <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/70 w-5 h-5" />
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="w-full pl-12 pr-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-white/50 focus:outline-none focus:border-orange-400 focus:bg-white/20 transition-all"
+                    required
+                  />
+                </div>
+              )}
 
               <div className="relative">
                 <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/70 w-5 h-5" />
                 <input
-                  type={showPassword ? "text" : "password"}
+                  type={showPassword ? 'text' : 'password'}
                   placeholder="Password"
                   value={formData.password}
-                  onChange={(e) => setFormData({...formData, password: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   className="w-full pl-12 pr-12 py-4 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-white/50 focus:outline-none focus:border-orange-400 focus:bg-white/20 transition-all"
                   required
                 />
@@ -201,14 +214,7 @@ const AuthPage: React.FC = () => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                {loading ? (
-                  <div className="flex items-center justify-center">
-                    <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
-                    Processing...
-                  </div>
-                ) : (
-                  isLogin ? 'Login to ROAMR' : 'Create Account'
-                )}
+                {loading ? 'Processing...' : isLogin ? 'Login to ROAMR' : 'Create Account'}
               </motion.button>
             </form>
 
